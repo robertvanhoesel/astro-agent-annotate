@@ -20,6 +20,9 @@ importers:
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
+      vite:
+        specifier: ^6.4.2
+        version: 6.4.2(@types/node@20.19.41)
 
 packages:
 
