@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 ---
 <Base title="Walkthrough · astro-agent-annotate">
-  <h1>Walkthrough</h1>
+  <h1 class="walkthrough-title">Walkthrough</h1>
   <p>This page is here so you can practice the flow on something that isn't the homepage. Annotate a few things, then go back to <a href="/" class="link">Overview</a> and annotate there too. Open the toolbar — you'll see both pages' notes grouped together.</p>
 
   <h2>1. Hold Alt</h2>
@@ -45,6 +45,13 @@ import Base from "../layouts/Base.astro";
   </article>
 
   <style>
+    .walkthrough-title {
+      font-size: clamp(58px, 8vw, 86px);
+      line-height: 0.95;
+      margin-bottom: 24px;
+      letter-spacing: -0.04em;
+    }
+
     .trial {
       background: var(--panel);
       border: 1px solid var(--border);
