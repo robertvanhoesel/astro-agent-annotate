@@ -1,0 +1,254 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="astro-agent-annotate — annotate the UI, paste to your agent">
+  <script is:inline>
+    (function () {
+      const KEY_PREFIX = "aaa:annotations:";
+      const SEED_FLAG = "aaa:demo-seeded-v1";
+      try {
+        if (localStorage.getItem(SEED_FLAG)) return;
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(KEY_PREFIX)) {
+            localStorage.setItem(SEED_FLAG, "1");
+            return;
+          }
+        }
+        const now = Date.now();
+        const uuid = () =>
+          (crypto && crypto.randomUUID && crypto.randomUUID()) ||
+          Math.random().toString(36).slice(2);
+        const annotations = [
+          {
+            id: uuid(),
+            note: "Stronger contrast — this eyebrow nearly disappears on the gradient.",
+            source: "src/pages/index.astro:11:5",
+            selector: "main > section.hero > span.eyebrow",
+            tag: "span",
+            html: '<span class="eyebrow">Astro dev toolbar plugin</span>',
+            createdAt: now - 60000,
+          },
+          {
+            id: uuid(),
+            note: 'Rename to "Hold Alt + click" — "point and click" is ambiguous.',
+            source: "src/pages/index.astro:30:11",
+            selector: "main > ol.steps > li:nth-of-type(1) > h3",
+            tag: "h3",
+            html: "<h3>Point and click</h3>",
+            createdAt: now - 30000,
+          },
+        ];
+        localStorage.setItem(KEY_PREFIX + "/", JSON.stringify(annotations));
+        localStorage.setItem(SEED_FLAG, "1");
+      } catch (_) {
+        /* ignore — localStorage unavailable */
+      }
+    })();
+  </script>
+
+  <section class="hero">
+    <span class="eyebrow">Astro dev toolbar plugin</span>
+    <h1>Annotate any UI element.<br/>Paste it all into your agent.</h1>
+    <p class="lede">
+      You're building a site with Claude or Cursor. You see five things to change. Instead of
+      describing each one in words — <em>"the second card, the one with the gradient, has the wrong padding on mobile"</em> — you Alt+click each, type a short note, then copy them all to your clipboard.
+    </p>
+    <div class="cta">
+      <span class="key">Hold <kbd>Alt</kbd></span>
+      <span class="plus">+</span>
+      <span class="key">Click any element on this page</span>
+    </div>
+    <p class="hint">…or click the tag icon in the Astro dev toolbar below.</p>
+  </section>
+
+  <figure class="demo">
+    <img src="/demo.gif" alt="Annotating elements and copying notes to the clipboard" />
+  </figure>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>
+      <h3>Point and click</h3>
+      <p>Hold Alt to highlight the element under your cursor. Click to attach a note.</p>
+    </li>
+    <li>
+      <h3>Keep working</h3>
+      <p>Each annotated element gets a small purple bubble. They persist across reloads and follow you across routes.</p>
+    </li>
+    <li>
+      <h3>Copy to the agent</h3>
+      <p>Open the toolbar, click <strong>Copy</strong>. You get a clean markdown block grouped by page, with source paths like <code>src/components/Hero.astro:7:23</code>.</p>
+    </li>
+  </ol>
+
+  <h2>What gets copied</h2>
+  <p>Markdown, grouped by page. No XML, no JSON. Paste it straight into the chat:</p>
+  <div class="chat">
+    <div class="avatar" aria-hidden="true">Y</div>
+    <div class="bubble">
+      <div class="bubble-meta">You · pasted from the dev toolbar</div>
+      <pre><code># Annotations
+_Collected 2026-05-22T19:00:00.000Z_
+
+## `/` — 2 notes
+
+1. **CTA is hard to find on mobile**
+   - `src/components/Hero.astro:7:23`
+   - `&lt;button class="cta"&gt;Get started&lt;/button&gt;`
+2. **Cards should be 3-column on desktop**
+   - `src/pages/index.astro:18:5`</code></pre>
+    </div>
+  </div>
+
+  <h2>Try this page</h2>
+  <p>
+    Two annotations are already seeded — see the purple bubbles? Hover Alt to add more. Spot a wording you'd change, a button style that bugs you, a heading you'd reword. Click it, type whatever you'd say to the agent.
+  </p>
+
+  <div class="cards">
+    <article class="card">
+      <h3>Built for vibe-coders</h3>
+      <p>Less time typing context, more time shipping. The agent gets the exact file, line, and your intent.</p>
+    </article>
+    <article class="card">
+      <h3>Cross-page sessions</h3>
+      <p>Annotate the homepage, navigate to <a href="/walkthrough" class="link">/walkthrough</a>, annotate more. The toolbar collects every note from every route until you copy.</p>
+    </article>
+    <article class="card">
+      <h3>Dev-only</h3>
+      <p>Vite plugin and toolbar app only register during <code>astro dev</code>. Your production bundle is untouched.</p>
+    </article>
+    <article class="card">
+      <h3>Astro-native</h3>
+      <p>Lives in the Astro dev toolbar where you already are. No extension, no Chrome integration.</p>
+    </article>
+  </div>
+
+  <style>
+    .hero { padding-top: 8px; }
+    figure.demo {
+      margin: 32px 0 0;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+    figure.demo img { display: block; width: 100%; height: auto; }
+
+    .chat {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 12px 0 18px;
+    }
+    .chat .avatar {
+      flex: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font: 700 13px/34px ui-sans-serif, system-ui, sans-serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .chat .bubble {
+      flex: 1;
+      min-width: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      border: 1px solid #1e293b;
+      border-radius: 4px 12px 12px 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    }
+    .chat .bubble-meta {
+      font: 12px/1.4 ui-sans-serif, system-ui, sans-serif;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .chat .bubble pre {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font: 600 11px/1.4 ui-monospace, monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 18px;
+    }
+    .lede {
+      font-size: 17px;
+      color: #334155;
+      margin: 8px 0 28px;
+      max-width: 56ch;
+    }
+    .lede em { color: var(--dim); font-style: italic; }
+    .cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .cta .key { color: var(--text); }
+    .cta .plus { color: var(--dim); }
+    .hint { margin-top: 12px; color: var(--dim); font-size: 13px; }
+
+    ol.steps {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; gap: 4px;
+      counter-reset: step;
+    }
+    ol.steps li {
+      counter-increment: step;
+      padding: 14px 16px 14px 56px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      position: relative;
+    }
+    ol.steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 16px; top: 14px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(78, 27, 145, 0.10);
+      color: var(--accent);
+      font: 600 13px/28px ui-monospace, monospace;
+      text-align: center;
+    }
+    ol.steps li h3 { margin: 0 0 2px; }
+    ol.steps li p { margin: 0; font-size: 14px; }
+
+    .cards {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 16px;
+    }
+    @media (max-width: 600px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+    .card h3 { margin: 0 0 6px; font-size: 15px; }
+    .card p { margin: 0; font-size: 14px; }
+  </style>
+</Base>
