@@ -36,27 +36,27 @@ const { title = "astro-agent-annotate" } = Astro.props;
       nav {
         display: flex; gap: 20px; align-items: center;
         padding: 16px 32px;
-        border-bottom: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.7);
+        border-bottom: 1px solid rgba(78, 27, 145, 0.16);
+        background: rgba(250, 247, 255, 0.82);
         backdrop-filter: blur(6px);
       }
       nav .brand {
         display: inline-flex; align-items: center; gap: 8px;
         font-weight: 700; letter-spacing: -0.01em;
-        color: var(--text);
+        color: var(--accent);
         text-decoration: none;
       }
       nav .brand svg {
         display: block;
         width: 22px; height: 22px;
       }
-      nav .links { margin-left: auto; display: flex; gap: 18px; }
+      nav .links { margin-left: auto; display: flex; gap: 32px; }
       nav a {
         color: var(--muted);
         text-decoration: none;
         font-size: 14px;
       }
-      nav a:hover, nav a.current { color: var(--text); }
+      nav a:hover, nav a.current { color: var(--accent); }
 
       main {
         max-width: 760px;
@@ -132,6 +132,7 @@ const { title = "astro-agent-annotate" } = Astro.props;
         <a href="/" class={Astro.url.pathname === "/" ? "current" : ""}>Overview</a>
         <a href="/walkthrough" class={Astro.url.pathname === "/walkthrough" ? "current" : ""}>Walkthrough</a>
         <a href="/install" class={Astro.url.pathname === "/install" ? "current" : ""}>Install</a>
+        <a href="https://github.com/robertvanhoesel/astro-agent-annotate">GitHub</a>
       </div>
     </nav>
     <main>
