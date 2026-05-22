@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Walkthrough · astro-agent-annotate">
+  <h1>Walkthrough</h1>
+  <p>This page is here so you can practice the flow on something that isn't the homepage. Annotate a few things, then go back to <a href="/" class="link">Overview</a> and annotate there too. Open the toolbar — you'll see both pages' notes grouped together.</p>
+
+  <h2>1. Hold Alt</h2>
+  <p>Press and hold <kbd>Alt</kbd> (Option on macOS). The element under your cursor should outline in purple, with the tag name and source path in a tooltip.</p>
+
+  <h2>2. Click to annotate</h2>
+  <p>Click an element while Alt is held. A small note input appears with the element's source identifier. Type your note and hit <kbd>Enter</kbd> — or <kbd>Esc</kbd> to bail out.</p>
+
+  <h2>3. Edit later</h2>
+  <p>Once saved, the element gets a small purple bubble in its corner. Click the bubble to edit or delete the note. Bubbles re-appear on reload as long as the annotation is still pending.</p>
+
+  <h2>4. Copy everything</h2>
+  <p>Click the <strong>tag icon</strong> in the dev toolbar. You'll see all your notes grouped by URL, and a single button to copy them to the clipboard as markdown.</p>
+
+  <h2>Stuff to try annotating</h2>
+
+  <article class="trial">
+    <h3>This button is fine</h3>
+    <p>But maybe it should be bigger, or live in the navbar, or open something different. Tell the agent.</p>
+    <button class="trial-cta">Sign up</button>
+  </article>
+
+  <article class="trial">
+    <h3>This card has a quirk</h3>
+    <p>Maybe the title hierarchy is off. Maybe the padding is wrong. Annotate it.</p>
+    <div class="quirk">
+      <span class="quirk-label">Limited</span>
+      <h4>Early-access tier</h4>
+      <p>Annotate as many elements as you want. There is no limit. Please file an issue if you find one.</p>
+    </div>
+  </article>
+
+  <article class="trial">
+    <h3>A list of things</h3>
+    <ul>
+      <li>The bullet style</li>
+      <li>The spacing between items</li>
+      <li>The way the third one is highlighted</li>
+    </ul>
+  </article>
+
+  <style>
+    .trial {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 12px 0;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+    .trial h3 { margin: 0 0 4px; font-size: 16px; }
+    .trial > p { margin: 0 0 12px; font-size: 14px; }
+    .trial-cta {
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font: 600 13px/1 inherit;
+      cursor: pointer;
+    }
+    .trial-cta:hover { background: #6b2cb8; }
+    .quirk {
+      background: rgba(78, 27, 145, 0.06);
+      border: 1px dashed rgba(78, 27, 145, 0.30);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .quirk-label {
+      display: inline-block;
+      font: 600 10px/1.2 ui-monospace, monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 6px;
+    }
+    .quirk h4 { margin: 0 0 6px; font-size: 16px; }
+    .quirk p { margin: 0; font-size: 14px; }
+
+    ul { color: var(--muted); }
+    ul li:nth-child(3) { color: var(--pink); font-weight: 600; }
+  </style>
+</Base>

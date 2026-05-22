@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "setup": "pnpm install && pnpm build && cd demo && pnpm install",
+    "run": "cd demo && pnpm dev"
+  }
+}

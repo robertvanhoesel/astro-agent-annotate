@@ -1,0 +1,144 @@
+---
+const { title = "astro-agent-annotate" } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --panel: #ffffff;
+        --panel-soft: #f1f3f5;
+        --border: #e4e7eb;
+        --border-soft: #eef0f3;
+        --text: #111827;
+        --muted: #4b5563;
+        --dim: #6b7280;
+        --accent: #4E1B91;
+        --blue: #B3C7FF;
+        --pink: #B33E67;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; }
+      body {
+        font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        background-image:
+          radial-gradient(60rem 30rem at 50% -10%, rgba(78, 27, 145, 0.06), transparent),
+          radial-gradient(40rem 20rem at 10% 100%, rgba(179, 62, 103, 0.05), transparent);
+        background-attachment: fixed;
+      }
+      nav {
+        display: flex; gap: 20px; align-items: center;
+        padding: 16px 32px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(6px);
+      }
+      nav .brand {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-weight: 700; letter-spacing: -0.01em;
+        color: var(--text);
+        text-decoration: none;
+      }
+      nav .brand svg {
+        display: block;
+        width: 22px; height: 22px;
+      }
+      nav .links { margin-left: auto; display: flex; gap: 18px; }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+      }
+      nav a:hover, nav a.current { color: var(--text); }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 64px 32px 96px;
+      }
+      h1 {
+        font-size: 44px; line-height: 1.1;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 22px; line-height: 1.3;
+        margin: 48px 0 12px;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        font-size: 16px;
+        margin: 16px 0 4px;
+      }
+      p { color: var(--muted); margin: 0 0 14px; }
+      a.link { color: var(--accent); text-decoration: none; font-weight: 500; }
+      a.link:hover { text-decoration: underline; }
+      kbd {
+        font: 12px/1 ui-monospace, monospace;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 2px 6px;
+        color: var(--text);
+      }
+      code:not(pre code) {
+        font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: var(--panel-soft);
+        border: 1px solid var(--border-soft);
+        border-radius: 4px;
+        padding: 1px 6px;
+        color: #1f2937;
+      }
+      pre {
+        background: #0f172a;
+        color: #e5e7eb;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 14px 16px;
+        overflow-x: auto;
+        font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      footer {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 32px 48px;
+        border-top: 1px solid var(--border);
+        color: var(--dim);
+        font-size: 13px;
+      }
+      footer a { color: var(--muted); text-decoration: none; }
+      footer a:hover { color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="brand" href="/" aria-label="astro-agent-annotate home">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path stroke="currentColor" stroke-width="2.5" d="M11 3H5a2 2 0 0 0-2 2v6a2 2 0 0 0 .586 1.414l8 8a2 2 0 0 0 2.828 0l6-6a2 2 0 0 0 0-2.828l-8-8A2 2 0 0 0 11 3Z" />
+          <circle stroke="currentColor" stroke-width="2.5" cx="7.5" cy="7.5" r="1.2" />
+          <circle fill="#B33E67" cx="19" cy="5" r="3" />
+        </svg>
+        <span>astro-agent-annotate</span>
+      </a>
+      <div class="links">
+        <a href="/" class={Astro.url.pathname === "/" ? "current" : ""}>Overview</a>
+        <a href="/walkthrough" class={Astro.url.pathname === "/walkthrough" ? "current" : ""}>Walkthrough</a>
+        <a href="/install" class={Astro.url.pathname === "/install" ? "current" : ""}>Install</a>
+      </div>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      Demo site for the plugin. Try it: hold <kbd>Alt</kbd> and click anything.
+    </footer>
+  </body>
+</html>

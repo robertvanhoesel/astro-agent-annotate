@@ -1,0 +1,42 @@
+{
+  "name": "astro-agent-annotate",
+  "version": "0.0.1",
+  "description": "Astro dev toolbar plugin: Alt+Click any element, annotate it, copy notes + source context to clipboard for AI agents.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./app": {
+      "types": "./dist/app.d.ts",
+      "import": "./dist/app.js"
+    }
+  },
+  "files": ["dist", "README.md", "demo.gif"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "demo": "cd demo && pnpm dev"
+  },
+  "keywords": [
+    "astro",
+    "astro-integration",
+    "dev-toolbar",
+    "annotate",
+    "ai-agent"
+  ],
+  "peerDependencies": {
+    "astro": "^4.0.0 || ^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "astro": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  },
+  "packageManager": "pnpm@10.12.1"
+}

@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Install · astro-agent-annotate">
+  <h1>Install</h1>
+  <p>It's an Astro integration. Add it to your config and you're done.</p>
+
+  <h2>1. Add the package</h2>
+  <pre><code>pnpm add -D astro-agent-annotate</code></pre>
+
+  <h2>2. Register the integration</h2>
+  <pre><code>// astro.config.mjs
+import &#123; defineConfig &#125; from "astro/config";
+import astroAgentAnnotate from "astro-agent-annotate";
+
+export default defineConfig(&#123;
+  integrations: [astroAgentAnnotate()],
+&#125;);</code></pre>
+  <p>The integration self-gates to <code>astro dev</code>. <code>astro build</code> ships nothing.</p>
+
+  <h2>3. Run dev</h2>
+  <pre><code>pnpm dev</code></pre>
+  <p>Look for the tag icon in the Astro dev toolbar. Hold <kbd>Alt</kbd> and click anything.</p>
+
+  <h2>Output format</h2>
+  <p>When you copy, you get markdown grouped by URL. Pages with no notes are skipped. Source paths are project-relative.</p>
+  <pre><code># Annotations
+_Collected 2026-05-22T19:00:00.000Z_
+
+## `/walkthrough` — 1 note
+
+1. **Make this button match the navbar style**
+   - `src/pages/walkthrough.astro:42:7`
+   - `&lt;button class="trial-cta"&gt;Sign up&lt;/button&gt;`</code></pre>
+</Base>
