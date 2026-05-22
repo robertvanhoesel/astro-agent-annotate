@@ -1,4 +1,4 @@
-# astro-agent-annotate
+# Astro Agent Annotate Devbar Utility
 
 Annotate the UI you're looking at, paste it all into your agent.
 
