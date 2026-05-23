@@ -22,12 +22,15 @@ function captureFrom(el: Element): void {
 }
 
 let observer: MutationObserver | null = null;
+const sel = "[data-aaa-src],[data-astro-source-file],[data-astro-source-loc]";
+
+function captureExisting(): void {
+  for (const el of document.querySelectorAll(sel)) captureFrom(el);
+}
 
 export function startSourceCache(): void {
+  captureExisting();
   if (observer) return;
-
-  const sel = "[data-aaa-src],[data-astro-source-file],[data-astro-source-loc]";
-  for (const el of document.querySelectorAll(sel)) captureFrom(el);
 
   observer = new MutationObserver((mutations) => {
     for (const mut of mutations) {

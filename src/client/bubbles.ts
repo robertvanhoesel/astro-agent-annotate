@@ -9,7 +9,10 @@ let started = false;
 let rafId = 0;
 
 function ensureHost(): void {
-  if (host) return;
+  if (host) {
+    if (!host.isConnected) document.body.appendChild(host);
+    return;
+  }
   host = document.createElement("div");
   host.id = HOST_ID;
   host.style.cssText =
@@ -108,7 +111,11 @@ function tick(): void {
 }
 
 export function startBubbles(): void {
-  if (started) return;
+  ensureHost();
+  if (started) {
+    renderBubbles();
+    return;
+  }
   started = true;
   renderBubbles();
   subscribe(renderBubbles);

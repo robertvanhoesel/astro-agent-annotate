@@ -3,6 +3,7 @@ import { mountOverlay, setOverlayActive } from "./client/overlay.js";
 import { startSourceCache } from "./client/source.js";
 import { startBubbles } from "./client/bubbles.js";
 import { copyAnnotations } from "./client/clipboard.js";
+import { closePopup } from "./client/note-popup.js";
 import {
   clearAll,
   getAllAnnotations,
@@ -67,6 +68,10 @@ if (typeof document !== "undefined") {
   } else {
     bootRuntime();
   }
+  document.addEventListener("astro:page-load", () => {
+    closePopup();
+    bootRuntime();
+  });
 }
 
 export default defineToolbarApp({

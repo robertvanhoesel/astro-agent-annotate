@@ -43,7 +43,10 @@ export function buildSelector(el: Element): string {
 }
 
 function ensureHost(): void {
-  if (host) return;
+  if (host) {
+    if (!host.isConnected) document.body.appendChild(host);
+    return;
+  }
   host = document.createElement("div");
   host.id = "aaa-popup-host";
   host.style.cssText =
