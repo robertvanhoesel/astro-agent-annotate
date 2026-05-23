@@ -1,0 +1,48 @@
+name: Version Packages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .changeset/**
+      - package.json
+      - pnpm-lock.yaml
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: version-packages-main
+  cancel-in-progress: true
+
+jobs:
+  version:
+    name: Open version PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Create version PR
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version-packages
+          title: Version Packages
+          commit: Version packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

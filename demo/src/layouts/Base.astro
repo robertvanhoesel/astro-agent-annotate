@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+
 const { title = "astro-agent-annotate" } = Astro.props;
 ---
 <!doctype html>
@@ -8,6 +10,7 @@ const { title = "astro-agent-annotate" } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <ClientRouter />
     <style>
       :root {
         --bg: #f6f7f9;

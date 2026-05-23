@@ -22,7 +22,10 @@ function isActive(): boolean {
 }
 
 function ensureOverlay(): void {
-  if (host) return;
+  if (host) {
+    if (!host.isConnected) document.body.appendChild(host);
+    return;
+  }
   host = document.createElement("div");
   host.id = HOST_ID;
   host.style.cssText =
@@ -239,9 +242,17 @@ export function setOverlayActive(active: boolean): void {
 }
 
 export function mountOverlay(): void {
-  if (mounted) return;
-  mounted = true;
   ensureOverlay();
+  if (mounted) {
+    if (isActive() && lastMouse) {
+      currentTarget = findTargetAt(lastMouse.x, lastMouse.y);
+    } else if (!isActive()) {
+      currentTarget = null;
+    }
+    updateOutline();
+    return;
+  }
+  mounted = true;
   window.addEventListener("keydown", onKeyDown, true);
   window.addEventListener("keyup", onKeyUp, true);
   window.addEventListener("blur", onBlur, true);

@@ -1,0 +1,98 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - pnpm-lock.yaml
+      - tsconfig.json
+      - tsup.config.ts
+      - src/**
+      - CHANGELOG.md
+      - README.md
+      - demo.gif
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Verify npm trusted publishing support
+        run: |
+          node --version
+          npm --version
+          node -e "const [major, minor, patch] = process.argv[1].split('.').map(Number); if (major < 11 || (major === 11 && (minor < 5 || (minor === 5 && patch < 1)))) process.exit(1);" "$(npm --version)"
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check package version
+        id: version
+        shell: bash
+        run: |
+          package_name="$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).name")"
+          package_version="$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")"
+          published_version="$(npm view "$package_name" version --silent || true)"
+
+          echo "package-name=$package_name" >> "$GITHUB_OUTPUT"
+          echo "package-version=$package_version" >> "$GITHUB_OUTPUT"
+          echo "published-version=$published_version" >> "$GITHUB_OUTPUT"
+
+          if [ "$published_version" = "$package_version" ]; then
+            echo "should-publish=false" >> "$GITHUB_OUTPUT"
+            echo "$package_name@$package_version is already published; skipping publish."
+          else
+            echo "should-publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pack dry run
+        if: steps.version.outputs.should-publish == 'true'
+        run: npm pack --dry-run
+
+      - name: Publish
+        if: steps.version.outputs.should-publish == 'true'
+        run: npm publish --access public
+
+      - name: Tag published version
+        if: steps.version.outputs.should-publish == 'true'
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.package-version }}
+        run: |
+          tag="v$PACKAGE_VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "$tag already exists; skipping tag creation."
+          else
+            git tag "$tag"
+            git push origin "$tag"
+          fi
