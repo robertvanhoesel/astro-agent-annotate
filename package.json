@@ -1,6 +1,6 @@
 {
   "name": "astro-agent-annotate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Astro dev toolbar plugin: Alt+Click any element, annotate it, copy notes + source context to clipboard for AI agents.",
   "license": "MIT",
   "type": "module",
